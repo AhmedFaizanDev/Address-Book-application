@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <regex>
 #include "Contact.h"
 
 using namespace std;
@@ -15,6 +16,11 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
+bool isValidEmail(const string& email) {
+    const regex pattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
+    return regex_match(email, pattern);
+}
+
 void addContact(vector<Contact>& contacts) {
     string name, phoneNumber, email;
     cout << "Enter name: ";
@@ -25,7 +31,7 @@ void addContact(vector<Contact>& contacts) {
     cout << "Enter email: ";
     getline(cin, email);
 
-    if (name.empty() || phoneNumber.empty() || email.empty()) {
+    if (name.empty() || phoneNumber.empty() || email.empty() || !isValidEmail(email)) {
         cout << "Invalid input. Please try again." << endl;
     } else {
         contacts.emplace_back(name, phoneNumber, email);
