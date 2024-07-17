@@ -6,26 +6,46 @@
 
 using namespace std;
 
-class Contact {
+// Contact class definition
+class Contact 
+{
 private:
     string name;
     string phoneNumber;
     string email;
 
 public:
+    // Constructor
     Contact(const string& name, const string& phoneNumber, const string& email)
         : name(name), phoneNumber(phoneNumber), email(email) {}
 
+    
     string getName() const { return name; }
     string getPhoneNumber() const { return phoneNumber; }
     string getEmail() const { return email; }
 
+    
     void setName(const string& newName) { name = newName; }
     void setPhoneNumber(const string& newPhoneNumber) { phoneNumber = newPhoneNumber; }
     void setEmail(const string& newEmail) { email = newEmail; }
 };
 
-void displayMenu() {
+//Functions
+void displayMenu();
+void toLowerCase(string& str);
+void addContact(vector<Contact>& contacts);
+void searchContact(const vector<Contact>& contacts);
+void displayAllContacts(const vector<Contact>& contacts);
+void updateContact(vector<Contact>& contacts);
+void deleteContact(vector<Contact>& contacts);
+void saveContactsToFile(const vector<Contact>& contacts);
+void loadContactsFromFile(vector<Contact>& contacts);
+void sortContacts(vector<Contact>& contacts);
+void countContacts(const vector<Contact>& contacts);
+
+//Function to display menu 
+void displayMenu() 
+{
     cout << "\n===== Address Book Menu =====" << endl;
     cout << "1. Add Contact" << endl;
     cout << "2. Search Contact" << endl;
@@ -37,11 +57,15 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
-void toLowerCase(string& str) {
+//Function to convert string to lowercase
+void toLowerCase(string& str) 
+{
     transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
 
-void addContact(vector<Contact>& contacts) {
+//Function to add a new contact
+void addContact(vector<Contact>& contacts) 
+{
     string name, phoneNumber, email;
     cout << "Enter name: ";
     cin.ignore();
@@ -55,7 +79,9 @@ void addContact(vector<Contact>& contacts) {
     cout << "Contact added successfully!" << endl;
 }
 
-void searchContact(const vector<Contact>& contacts) {
+//Function to search for a contact by name
+void searchContact(const vector<Contact>& contacts) 
+{
     string name;
     cout << "Enter the name of the contact to search: ";
     cin.ignore();
@@ -66,7 +92,8 @@ void searchContact(const vector<Contact>& contacts) {
     for (const auto& contact : contacts) {
         string contactName = contact.getName();
         toLowerCase(contactName);
-        if (contactName.find(name) != string::npos) {
+        if (contactName.find(name) != string::npos) 
+        {
             cout << "Contact found:" << endl;
             cout << "Name: " << contact.getName() << endl;
             cout << "Phone Number: " << contact.getPhoneNumber() << endl;
@@ -74,19 +101,24 @@ void searchContact(const vector<Contact>& contacts) {
             found = true;
         }
     }
-    if (!found) {
+    if (!found) 
+    {
         cout << "Contact not found." << endl;
     }
 }
 
-void displayAllContacts(const vector<Contact>& contacts) {
-    if (contacts.empty()) {
+//Function to display all contacts
+void displayAllContacts(const vector<Contact>& contacts) 
+{
+    if (contacts.empty()) 
+    {
         cout << "No contacts found." << endl;
         return;
     }
 
     cout << "\n===== All Contacts =====" << endl;
-    for (const auto& contact : contacts) {
+    for (const auto& contact : contacts) 
+    {
         cout << "Name: " << contact.getName() << endl;
         cout << "Phone Number: " << contact.getPhoneNumber() << endl;
         cout << "Email: " << contact.getEmail() << endl;
@@ -94,7 +126,9 @@ void displayAllContacts(const vector<Contact>& contacts) {
     }
 }
 
-void updateContact(vector<Contact>& contacts) {
+//Function to update existing contact
+void updateContact(vector<Contact>& contacts) 
+{
     string name;
     cout << "Enter the name of the contact to update: ";
     cin.ignore();
@@ -102,10 +136,12 @@ void updateContact(vector<Contact>& contacts) {
     toLowerCase(name);
 
     bool found = false;
-    for (auto& contact : contacts) {
+    for (auto& contact : contacts) 
+    {
         string contactName = contact.getName();
         toLowerCase(contactName);
-        if (contactName == name) {
+        if (contactName == name) 
+        {
             cout << "Contact found. Enter new details." << endl;
             cout << "Enter new name (leave blank to keep current): ";
             string newName;
@@ -127,12 +163,15 @@ void updateContact(vector<Contact>& contacts) {
             break;
         }
     }
-    if (!found) {
+    if (!found) 
+    {
         cout << "Contact not found." << endl;
     }
 }
 
-void deleteContact(vector<Contact>& contacts) {
+//Function to delete a contact
+void deleteContact(vector<Contact>& contacts) 
+{
     string name;
     cout << "Enter the name of the contact to delete: ";
     cin.ignore();
@@ -145,15 +184,19 @@ void deleteContact(vector<Contact>& contacts) {
         return contactName == name;
     });
 
-    if (it != contacts.end()) {
+    if (it != contacts.end()) 
+    {
         contacts.erase(it);
         cout << "Contact deleted successfully!" << endl;
-    } else {
+    } else 
+    {
         cout << "Contact not found." << endl;
     }
 }
 
-void saveContactsToFile(const vector<Contact>& contacts) {
+//Function to save contacts to a file
+void saveContactsToFile(const vector<Contact>& contacts) 
+{
     ofstream outFile("contacts.txt");
     for (const auto& contact : contacts) {
         outFile << contact.getName() << endl;
@@ -164,21 +207,26 @@ void saveContactsToFile(const vector<Contact>& contacts) {
     cout << "Contacts saved to file 'contacts.txt'." << endl;
 }
 
-void loadContactsFromFile(vector<Contact>& contacts) {
+//Function to load contacts from a file
+void loadContactsFromFile(vector<Contact>& contacts) 
+{
     ifstream inFile("contacts.txt");
-    if (!inFile.is_open()) {
+    if (!inFile.is_open()) 
+    {
         cout << "No contacts found." << endl;
         return;
     }
 
     string name, phoneNumber, email;
-    while (getline(inFile, name) && getline(inFile, phoneNumber) && getline(inFile, email)) {
+    while (getline(inFile, name) && getline(inFile, phoneNumber) && getline(inFile, email)) 
+    {
         contacts.emplace_back(name, phoneNumber, email);
     }
     inFile.close();
     cout << "Contacts loaded from file 'contacts.txt'." << endl;
 }
 
+//Function to sort contacts alphabetically by name
 void sortContacts(vector<Contact>& contacts) {
     sort(contacts.begin(), contacts.end(), [](const Contact& a, const Contact& b) {
         return a.getName() < b.getName();
@@ -186,14 +234,18 @@ void sortContacts(vector<Contact>& contacts) {
     cout << "Contacts sorted by name." << endl;
 }
 
-void countContacts(const vector<Contact>& contacts) {
+//Function to count total number of contacts
+void countContacts(const vector<Contact>& contacts) 
+{
     int count = contacts.size();
     cout << "Total contacts: " << count << endl;
 }
 
-int main() {
+
+int main() 
+{
     vector<Contact> contacts;
-    loadContactsFromFile(contacts);
+    loadContactsFromFile(contacts); // Load contacts from file on startup
 
     int choice;
     do {
@@ -227,5 +279,4 @@ int main() {
         }
     } while (choice != 7);
 
-    return 0;
 }
