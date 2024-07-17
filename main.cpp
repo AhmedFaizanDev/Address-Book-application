@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <regex>
+#include <fstream>
 #include "Contact.h"
 
 using namespace std;
@@ -81,6 +82,16 @@ void displayAllContacts(const vector<Contact>& contacts) {
     }
 }
 
+void saveContactsToFile(const vector<Contact>& contacts) {
+    ofstream file("contacts.txt");
+    for (const auto& contact : contacts) {
+        file << contact.getName() << endl;
+        file << contact.getPhoneNumber() << endl;
+        file << contact.getEmail() << endl;
+    }
+    file.close();
+}
+
 int main() {
     vector<Contact> contacts;
     int choice;
@@ -99,7 +110,8 @@ int main() {
                 displayAllContacts(contacts);
                 break;
             case 4:
-                cout << "Exiting..." << endl;
+                saveContactsToFile(contacts);
+                cout << "Contacts saved to file. Exiting..." << endl;
                 break;
             default:
                 cout << "Invalid choice, please try again." << endl;
