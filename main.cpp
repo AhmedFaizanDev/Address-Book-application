@@ -25,7 +25,6 @@ bool isValidEmail(const string& email) {
 void addContact(vector<Contact>& contacts) {
     string name, phoneNumber, email;
     cout << "Enter name: ";
-    cin.ignore();
     getline(cin, name);
     cout << "Enter phone number: ";
     getline(cin, phoneNumber);
@@ -47,7 +46,6 @@ void toLowerCase(string& str) {
 void searchContact(const vector<Contact>& contacts) {
     string name;
     cout << "Enter name to search: ";
-    cin.ignore();
     getline(cin, name);
     toLowerCase(name);
 
@@ -106,9 +104,11 @@ int main() {
     loadContactsFromFile(contacts);
 
     int choice;
+    cin.ignore(); // Only one ignore before the loop
     do {
         displayMenu();
         cin >> choice;
+        cin.ignore(); // Ignore after reading the choice
 
         switch (choice) {
             case 1:
