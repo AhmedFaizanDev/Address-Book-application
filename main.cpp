@@ -1,6 +1,7 @@
 // main.cpp
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "Contact.h"
 
 using namespace std;
@@ -32,15 +33,22 @@ void addContact(vector<Contact>& contacts) {
     }
 }
 
+void toLowerCase(string& str) {
+    transform(str.begin(), str.end(), str.begin(), ::tolower);
+}
+
 void searchContact(const vector<Contact>& contacts) {
     string name;
     cout << "Enter name to search: ";
     cin.ignore();
     getline(cin, name);
+    toLowerCase(name);
 
     bool found = false;
     for (const auto& contact : contacts) {
-        if (contact.getName() == name) {
+        string contactName = contact.getName();
+        toLowerCase(contactName);
+        if (contactName == name) {
             cout << "Contact found:" << endl;
             cout << "Name: " << contact.getName() << endl;
             cout << "Phone Number: " << contact.getPhoneNumber() << endl;
