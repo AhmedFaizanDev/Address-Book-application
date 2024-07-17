@@ -26,6 +26,27 @@ void addContact(vector<Contact>& contacts) {
     cout << "Contact added successfully!" << endl;
 }
 
+void searchContact(const vector<Contact>& contacts) {
+    string name;
+    cout << "Enter name to search: ";
+    cin >> name;
+
+    bool found = false;
+    for (const auto& contact : contacts) {
+        if (contact.getName() == name) {
+            cout << "Contact found:" << endl;
+            cout << "Name: " << contact.getName() << endl;
+            cout << "Phone Number: " << contact.getPhoneNumber() << endl;
+            cout << "Email: " << contact.getEmail() << endl;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Contact not found." << endl;
+    }
+}
+
 int main() {
     vector<Contact> contacts;
     int choice;
@@ -38,7 +59,7 @@ int main() {
                 addContact(contacts);
                 break;
             case 2:
-                cout << "Search Contact selected" << endl;
+                searchContact(contacts);
                 break;
             case 3:
                 cout << "Display All Contacts selected" << endl;
