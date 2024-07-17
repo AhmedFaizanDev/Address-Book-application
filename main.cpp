@@ -9,25 +9,13 @@
 using namespace std;
 
 
-void deleteContact(vector<Contact>& contacts) {
-    string name;
-    cout << "Enter the name of the contact to delete: ";
-    cin.ignore();
-    getline(cin, name);
-    toLowerCase(name);
+bool compareByName(const Contact& a, const Contact& b) {
+    return a.getName() < b.getName();
+}
 
-    auto it = remove_if(contacts.begin(), contacts.end(), [&name](const Contact& contact) {
-        string contactName = contact.getName();
-        toLowerCase(contactName);
-        return contactName == name;
-    });
-
-    if (it != contacts.end()) {
-        contacts.erase(it, contacts.end());
-        cout << "Contact deleted successfully!" << endl;
-    } else {
-        cout << "Contact not found." << endl;
-    }
+void sortContacts(vector<Contact>& contacts) {
+    sort(contacts.begin(), contacts.end(), compareByName);
+    cout << "Contacts sorted by name." << endl;
 }
 
 int main() {
@@ -59,10 +47,13 @@ int main() {
                 saveContactsToFile(contacts);
                 cout << "Contacts saved to file. Exiting..." << endl;
                 break;
+            case 7:
+                sortContacts(contacts);
+                break;
             default:
                 cout << "Invalid choice, please try again." << endl;
         }
-    } while (choice != 6);
+    } while (choice != 7);
 
     return 0;
 }
