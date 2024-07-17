@@ -8,56 +8,39 @@
 
 using namespace std;
 
-void displayMenu() {
-    cout << "Simple Address Book" << endl;
-    cout << "1. Add Contact" << endl;
-    cout << "2. Search Contact" << endl;
-    cout << "3. Display All Contacts" << endl;
-    cout << "4. Exit" << endl;
-    cout << "Enter your choice: ";
-}
-
-bool isValidEmail(const string& email) {
-    const regex pattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
-    return regex_match(email, pattern);
-}
-
-void addContact(vector<Contact>& contacts) {
-    string name, phoneNumber, email;
-    cout << "Enter name: ";
-    getline(cin, name);
-    cout << "Enter phone number: ";
-    getline(cin, phoneNumber);
-    cout << "Enter email: ";
-    getline(cin, email);
-
-    if (name.empty() || phoneNumber.empty() || email.empty() || !isValidEmail(email)) {
-        cout << "Invalid input. Please try again." << endl;
-    } else {
-        contacts.emplace_back(name, phoneNumber, email);
-        cout << "Contact added successfully!" << endl;
-    }
-}
-
-void toLowerCase(string& str) {
-    transform(str.begin(), str.end(), str.begin(), ::tolower);
-}
-
-void searchContact(const vector<Contact>& contacts) {
+void updateContact(vector<Contact>& contacts) {
     string name;
-    cout << "Enter name to search: ";
+    cout << "Enter the name of the contact to update: ";
+    cin.ignore();
     getline(cin, name);
     toLowerCase(name);
 
     bool found = false;
-    for (const auto& contact : contacts) {
+    for (auto& contact : contacts) {
         string contactName = contact.getName();
         toLowerCase(contactName);
         if (contactName == name) {
-            cout << "Contact found:" << endl;
-            cout << "Name: " << contact.getName() << endl;
-            cout << "Phone Number: " << contact.getPhoneNumber() << endl;
-            cout << "Email: " << contact.getEmail() << endl;
+            cout << "Contact found. Enter new details." << endl;
+            cout << "Enter new name (leave blank to keep current): ";
+            string newName;
+            getline(cin, newName);
+            if (!newName.empty()) contact.setName(newName);
+
+            cout << "Enter new phone number (leave blank to keep current): ";
+            string newPhoneNumber;
+            getline(cin, newPhoneNumber);
+            if (!newPhoneNumber.empty()) contact.setPhoneNumber(newPhoneNumber);
+
+            cout << "Enter new email (leave blank to keep current): ";
+            string newEmail;
+            getline(cin, newEmail);
+            if (!newEmail.empty() && isValidEmail(newEmail)) {
+                contact.setEmail(newEmail);
+            } else if (!newEmail.empty()) {
+                cout << "Invalid email. Keeping current email." << endl;
+            }
+
+            cout << "Contact updated successfully!" << endl;
             found = true;
             break;
         }
@@ -67,48 +50,14 @@ void searchContact(const vector<Contact>& contacts) {
     }
 }
 
-void displayAllContacts(const vector<Contact>& contacts) {
-    if (contacts.empty()) {
-        cout << "No contacts to display." << endl;
-    } else {
-        for (const auto& contact : contacts) {
-            cout << "Name: " << contact.getName() << endl;
-            cout << "Phone Number: " << contact.getPhoneNumber() << endl;
-            cout << "Email: " << contact.getEmail() << endl;
-            cout << "-------------------------" << endl;
-        }
-    }
-}
-
-void saveContactsToFile(const vector<Contact>& contacts) {
-    ofstream file("contacts.txt");
-    for (const auto& contact : contacts) {
-        file << contact.getName() << endl;
-        file << contact.getPhoneNumber() << endl;
-        file << contact.getEmail() << endl;
-    }
-    file.close();
-}
-
-void loadContactsFromFile(vector<Contact>& contacts) {
-    ifstream file("contacts.txt");
-    string name, phoneNumber, email;
-    while (getline(file, name) && getline(file, phoneNumber) && getline(file, email)) {
-        contacts.emplace_back(name, phoneNumber, email);
-    }
-    file.close();
-}
-
 int main() {
     vector<Contact> contacts;
     loadContactsFromFile(contacts);
 
     int choice;
-    cin.ignore(); // Only one ignore before the loop
     do {
         displayMenu();
         cin >> choice;
-        cin.ignore(); // Ignore after reading the choice
 
         switch (choice) {
             case 1:
@@ -121,13 +70,17 @@ int main() {
                 displayAllContacts(contacts);
                 break;
             case 4:
+                updateContact(contacts);
+                break;
+            case 5:
                 saveContactsToFile(contacts);
                 cout << "Contacts saved to file. Exiting..." << endl;
                 break;
             default:
                 cout << "Invalid choice, please try again." << endl;
         }
-    } while (choice != 4);
+    } while (choice != 5);
 
     return 0;
 }
+
