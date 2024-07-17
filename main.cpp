@@ -17,19 +17,26 @@ void displayMenu() {
 void addContact(vector<Contact>& contacts) {
     string name, phoneNumber, email;
     cout << "Enter name: ";
-    cin >> name;
+    cin.ignore();
+    getline(cin, name);
     cout << "Enter phone number: ";
-    cin >> phoneNumber;
+    getline(cin, phoneNumber);
     cout << "Enter email: ";
-    cin >> email;
-    contacts.emplace_back(name, phoneNumber, email);
-    cout << "Contact added successfully!" << endl;
+    getline(cin, email);
+
+    if (name.empty() || phoneNumber.empty() || email.empty()) {
+        cout << "Invalid input. Please try again." << endl;
+    } else {
+        contacts.emplace_back(name, phoneNumber, email);
+        cout << "Contact added successfully!" << endl;
+    }
 }
 
 void searchContact(const vector<Contact>& contacts) {
     string name;
     cout << "Enter name to search: ";
-    cin >> name;
+    cin.ignore();
+    getline(cin, name);
 
     bool found = false;
     for (const auto& contact : contacts) {
