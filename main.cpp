@@ -92,8 +92,19 @@ void saveContactsToFile(const vector<Contact>& contacts) {
     file.close();
 }
 
+void loadContactsFromFile(vector<Contact>& contacts) {
+    ifstream file("contacts.txt");
+    string name, phoneNumber, email;
+    while (getline(file, name) && getline(file, phoneNumber) && getline(file, email)) {
+        contacts.emplace_back(name, phoneNumber, email);
+    }
+    file.close();
+}
+
 int main() {
     vector<Contact> contacts;
+    loadContactsFromFile(contacts);
+
     int choice;
     do {
         displayMenu();
