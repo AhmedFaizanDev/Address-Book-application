@@ -47,6 +47,19 @@ void searchContact(const vector<Contact>& contacts) {
     }
 }
 
+void displayAllContacts(const vector<Contact>& contacts) {
+    if (contacts.empty()) {
+        cout << "No contacts to display." << endl;
+    } else {
+        for (const auto& contact : contacts) {
+            cout << "Name: " << contact.getName() << endl;
+            cout << "Phone Number: " << contact.getPhoneNumber() << endl;
+            cout << "Email: " << contact.getEmail() << endl;
+            cout << "-------------------------" << endl;
+        }
+    }
+}
+
 int main() {
     vector<Contact> contacts;
     int choice;
@@ -62,7 +75,7 @@ int main() {
                 searchContact(contacts);
                 break;
             case 3:
-                cout << "Display All Contacts selected" << endl;
+                displayAllContacts(contacts);
                 break;
             case 4:
                 cout << "Exiting..." << endl;
