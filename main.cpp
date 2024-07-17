@@ -8,44 +8,24 @@
 
 using namespace std;
 
-void updateContact(vector<Contact>& contacts) {
+
+void deleteContact(vector<Contact>& contacts) {
     string name;
-    cout << "Enter the name of the contact to update: ";
+    cout << "Enter the name of the contact to delete: ";
     cin.ignore();
     getline(cin, name);
     toLowerCase(name);
 
-    bool found = false;
-    for (auto& contact : contacts) {
+    auto it = remove_if(contacts.begin(), contacts.end(), [&name](const Contact& contact) {
         string contactName = contact.getName();
         toLowerCase(contactName);
-        if (contactName == name) {
-            cout << "Contact found. Enter new details." << endl;
-            cout << "Enter new name (leave blank to keep current): ";
-            string newName;
-            getline(cin, newName);
-            if (!newName.empty()) contact.setName(newName);
+        return contactName == name;
+    });
 
-            cout << "Enter new phone number (leave blank to keep current): ";
-            string newPhoneNumber;
-            getline(cin, newPhoneNumber);
-            if (!newPhoneNumber.empty()) contact.setPhoneNumber(newPhoneNumber);
-
-            cout << "Enter new email (leave blank to keep current): ";
-            string newEmail;
-            getline(cin, newEmail);
-            if (!newEmail.empty() && isValidEmail(newEmail)) {
-                contact.setEmail(newEmail);
-            } else if (!newEmail.empty()) {
-                cout << "Invalid email. Keeping current email." << endl;
-            }
-
-            cout << "Contact updated successfully!" << endl;
-            found = true;
-            break;
-        }
-    }
-    if (!found) {
+    if (it != contacts.end()) {
+        contacts.erase(it, contacts.end());
+        cout << "Contact deleted successfully!" << endl;
+    } else {
         cout << "Contact not found." << endl;
     }
 }
@@ -73,14 +53,16 @@ int main() {
                 updateContact(contacts);
                 break;
             case 5:
+                deleteContact(contacts);
+                break;
+            case 6:
                 saveContactsToFile(contacts);
                 cout << "Contacts saved to file. Exiting..." << endl;
                 break;
             default:
                 cout << "Invalid choice, please try again." << endl;
         }
-    } while (choice != 5);
+    } while (choice != 6);
 
     return 0;
 }
-
