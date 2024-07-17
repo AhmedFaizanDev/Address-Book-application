@@ -1,0 +1,7 @@
+# Ignore binary files
+*.o
+*.out
+*.exe
+
+# Ignore contact file
+contacts.txt
